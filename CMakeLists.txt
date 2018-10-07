@@ -77,12 +77,51 @@ list(APPEND TARGET_LIBRARIES sioclient_tls)
 
 endif()
 
-install(FILES ${ALL_HEADERS} 
-    DESTINATION "${CMAKE_CURRENT_LIST_DIR}/build/include"
+# install configuration
+set(CONFIG_INSTALL_DIR "lib/cmake/${PROJECT_NAME}")
+set(INCLUDE_INSTALL_DIR "include/sioclient")
+set(VERSION_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake")
+set(PROJECT_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake")
+set(TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
+
+# load helper functions
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${VERSION_CONFIG}"
+    VERSION ${MAJOR}.${MINOR}.${PATCH}
+    COMPATIBILITY SameMajorVersion
+)
+configure_package_config_file(
+    "config.cmake.in" "${PROJECT_CONFIG}"
+    INSTALL_DESTINATION "${CONFIG_INSTALL_DIR}"
 )
 
-install(TARGETS ${TARGET_LIBRARIES}
-    DESTINATION "${CMAKE_CURRENT_LIST_DIR}/build/lib/${CMAKE_BUILD_TYPE}"
+# basic installation settings
+install(
+    TARGETS sioclient
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    LIBRARY DESTINATION "lib"
+    ARCHIVE DESTINATION "lib"
+    RUNTIME DESTINATION "bin"
+    INCLUDES DESTINATION "${INCLUDE_INSTALL_DIR}"
+)
+
+# install .cmake configures
+install(
+    FILES "${PROJECT_CONFIG}" "${VERSION_CONFIG}"
+    DESTINATION "${CONFIG_INSTALL_DIR}"
+)
+install(
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    NAMESPACE "${NAMESPACE}"
+    DESTINATION "${CONFIG_INSTALL_DIR}"
+)
+
+# install headers
+install(
+    DIRECTORY "src/"
+    DESTINATION ${INCLUDE_INSTALL_DIR}
+    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
 )
 
 if(BUILD_UNIT_TESTS)
