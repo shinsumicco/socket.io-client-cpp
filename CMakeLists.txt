@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 PROJECT(sioclient)
 
 option(BUILD_SHARED_LIBS "Build the shared library" ON)
-option(BUILD_UNIT_TESTS  "Builds unit tests target" OFF)
+option(BUILD_UNIT_TESTS  "Build unit test target" ON)
 
 set(MAJOR 1)
 set(MINOR 6)
