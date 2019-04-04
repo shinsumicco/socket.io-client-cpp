@@ -29,6 +29,7 @@ add_definitions(
         -D_WEBSOCKETPP_CPP11_FUNCTIONAL_)
 
 add_library(sioclient ${ALL_SRC})
+
 target_include_directories(sioclient PRIVATE
         "${CMAKE_CURRENT_LIST_DIR}/src"
         "${CMAKE_CURRENT_LIST_DIR}/lib/websocketpp"
@@ -37,6 +38,9 @@ target_include_directories(sioclient PRIVATE
 
 set_property(TARGET sioclient PROPERTY CXX_STANDARD 11)
 set_property(TARGET sioclient PROPERTY CXX_STANDARD_REQUIRED ON)
+
+find_package(Threads REQUIRED)
+target_link_libraries(sioclient PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 
 if(BUILD_SHARED_LIBS)
     set_target_properties(sioclient PROPERTIES
@@ -60,7 +64,7 @@ if(OPENSSL_FOUND)
     set_property(TARGET sioclient_tls PROPERTY CXX_STANDARD 11)
     set_property(TARGET sioclient_tls PROPERTY CXX_STANDARD_REQUIRED ON)
 
-    target_link_libraries(sioclient_tls PRIVATE ${OPENSSL_LIBRARIES})
+    target_link_libraries(sioclient_tls PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${OPENSSL_LIBRARIES})
     target_compile_definitions(sioclient_tls PRIVATE -DSIO_TLS)
 
     if(BUILD_SHARED_LIBS)
