@@ -6,3 +6,5 @@ find_path(SIOCLIENT_INCLUDE_DIR sioclient/sio_client.h sioclient/sio_message.h s
 )
 set(SIOCLIENT_LIBRARIES ${SIOCLIENT_LIBRARY})
 set(SIOCLIENT_INCLUDE_DIRS ${SIOCLIENT_INCLUDE_DIR})
+
+include(${CMAKE_CURRENT_LIST_DIR}/sioclientTargets.cmake)
